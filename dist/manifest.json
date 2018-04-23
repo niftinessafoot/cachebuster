@@ -1,4 +1,5 @@
 {
+  "author": "Matthew Smith",
   "background": {
     "persistent": false,
     "scripts": [
@@ -21,7 +22,7 @@
       }
     }
   },
-  "description": "Auto-appends a unique querystring to the URL and replaces the history state, forcing a reload from the server.",
+  "description": "Front-end devs: stop fiddling with the address bar every time you need fresh-baked server goodness.",
   "icons": {
     "128": "i/128.png",
     "16": "i/16.png",
@@ -31,8 +32,9 @@
   "manifest_version": 2,
   "minimum_chrome_version": "45",
   "name": "Cachebuster",
+  "short_name": "Cachebuster",
   "permissions": [
     "activeTab"
   ],
-  "version": "1.0.1"
+  "version": "1.0.2"
 }

@@ -20,7 +20,7 @@ function getNewPath(urlString){
     });
   }
 
-  obj.cacheBuster = +(new Date());
+  obj.cachebuster = +(new Date());
 
   const keys = Object.keys(obj);
 
