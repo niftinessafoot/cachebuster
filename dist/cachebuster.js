@@ -1,34 +1,30 @@
-function getNewPath(urlString){
+const setQueryParam = (location, key = 'cachebuster') => {
+  const value = +new Date();
   let url;
-  try{
-    url = new URL(urlString);
-  }
-  catch(e){
+
+  try {
+    url = new URL(location);
+  } catch (err) {
+    console.error(`Invalid URL: ${location}`);
     return false;
   }
 
-  const obj = {};
+  url.searchParams.set(key, value);
 
-  /*
-    Parse the existing querystring, if it exists.
-   */
-  const qs = url.search.substr(1);
-  if(qs){
-    qs.split('&').forEach((ele)=>{
-      const a = ele.split('=');
-      obj[a[0]] = a[1];
-    });
-  }
+  return url.toString();
+};
 
-  obj.cachebuster = +(new Date());
+const replaceState = (url) => history.replaceState(null, '', url);
 
-  const keys = Object.keys(obj);
+chrome.action.onClicked.addListener((tab) => {
+  const { id: tabId, url: oldUrl } = tab;
+  const url = setQueryParam(oldUrl);
 
-  let newqs = keys.map((key)=>{
-    const value = obj[key];
-    /* Querystring params don't necessarily need values. */
-    return value ? `${key}=${value}` : key;
-  }).join('&');
-
-  return url.pathname + '?' + newqs + url.hash;
-}
+  chrome.scripting
+    .executeScript({
+      target: { tabId },
+      func: replaceState,
+      args: [url],
+    })
+    .then(() => chrome.tabs.reload(tabId, { bypassCache: true }));
+});
